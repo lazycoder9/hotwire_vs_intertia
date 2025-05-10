@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'inertia-example', to: 'inertia_example#index'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -12,6 +13,10 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   namespace :hotwire do
-    resource :feedback, controller: :feedbacks, only: %i[new create]
+    resource :feedbacks, only: %i[new create]
+  end
+
+  namespace :inertia do
+    resource :feedbacks, only: %i[new create]
   end
 end

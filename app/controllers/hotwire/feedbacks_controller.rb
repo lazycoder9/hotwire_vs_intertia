@@ -7,7 +7,7 @@ module Hotwire
     def create
       @feedback = Feedback.new(feedback_params)
       if @feedback.save
-        redirect_to hotwire_feedback_path,
+        redirect_to hotwire_feedbacks_path,
                     notice: "Thanks for your feedback!"
       else
         render :new, status: :unprocessable_entity
