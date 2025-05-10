@@ -1,60 +1,61 @@
 # syntax=docker/dockerfile:1
-# check=error=true
 
-# This Dockerfile is designed for production, not development. Use with Kamal or build'n'run by hand:
-# docker build -t hotwire_vs_inertia .
-# docker run -d -p 80:80 -e RAILS_MASTER_KEY=<value from config/master.key> --name hotwire_vs_inertia hotwire_vs_inertia
-
-# For a containerized dev environment, see Dev Containers: https://guides.rubyonrails.org/getting_started_with_devcontainer.html
-
-# Make sure RUBY_VERSION matches the Ruby version in .ruby-version
+####################################################
+# 1) Base image (runtime deps only)               #
+####################################################
 ARG RUBY_VERSION=3.3.5
-FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
+FROM docker.io/library/ruby:${RUBY_VERSION}-slim AS base
 
-# Rails app lives here
 WORKDIR /rails
 
-# Install base packages
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libjemalloc2 libvips sqlite3 && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+    apt-get install --no-install-recommends -y \
+      curl libjemalloc2 libvips sqlite3 && \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/archives
 
-# Set production environment
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_WITHOUT="development"
 
-# Throw-away build stage to reduce size of final image
+####################################################
+# 2) Build image (gems + JS + assets)             #
+####################################################
 FROM base AS build
 
-# Install packages needed to build gems
+# install Ruby build deps + Node for Yarn/Vite
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libyaml-dev pkg-config && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+    apt-get install --no-install-recommends -y \
+      build-essential git libyaml-dev pkg-config \
+      nodejs npm && \
+    npm install -g yarn && \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/archives
 
-# Install application gems
+# 2.1) Ruby gems
 COPY Gemfile Gemfile.lock ./
 RUN bundle install && \
-    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
+    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache \
+           "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
     bundle exec bootsnap precompile --gemfile
 
-# Copy application code
-COPY . .
+# 2.2) JS deps (Vite/Ruby + React)
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
-# Precompile bootsnap code for faster boot times
+# 2.3) app code + Bootsnap precompile
+COPY . .
 RUN bundle exec bootsnap precompile app/ lib/
 
-# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+# 2.4) Rails + Vite asset build
+RUN SECRET_KEY_BASE_DUMMY=1 \
+    ./bin/rails assets:precompile
 
-
-
-
-# Final stage for app image
+####################################################
+# 3) Release image (runtime only, no build tools) #
+####################################################
 FROM base
 
-# Copy built artifacts: gems, application
+# copy in gems + compiled app
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /rails /rails
 
@@ -64,7 +65,6 @@ RUN groupadd --system --gid 1000 rails && \
     chown -R rails:rails db log storage tmp
 USER 1000:1000
 
-# Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 # Start server via Thruster by default, this can be overwritten at runtime
