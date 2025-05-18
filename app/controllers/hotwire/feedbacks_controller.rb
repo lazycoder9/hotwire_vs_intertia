@@ -1,14 +1,9 @@
 module Hotwire
   class FeedbacksController < ApplicationController
-    before_action :build_new_feedback, only: %i[index new]
+    before_action :build_new_feedback, only: %i[index]
 
     def index
       @feedbacks = Feedback.order(created_at: :desc)
-    end
-
-    def new
-      # optional: if you never navigate here you can
-      # redirect_to hotwire_feedbacks_path
     end
 
     def create

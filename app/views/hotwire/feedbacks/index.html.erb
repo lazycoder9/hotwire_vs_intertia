@@ -2,7 +2,7 @@
 
 <div class="flex flex-col md:flex-row h-screen">
   <div class="flex-1 p-2">
-    <%= render partial: "form", locals: { feedback: Feedback.new } %>
+    <%= render partial: "form", locals: { feedback: @feedback } %>
   </div>
   <div class="flex-1 p-2">
     <div id="feedbacks" class="space-y-4">
