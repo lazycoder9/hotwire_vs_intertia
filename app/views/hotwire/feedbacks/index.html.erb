@@ -1,0 +1,19 @@
+<h1 class="text-3xl font-bold text-white mb-6">Feedbacks</h1>
+
+<div class="flex flex-col md:flex-row h-screen">
+  <div class="flex-1 p-2">
+    <%= render partial: "form", locals: { feedback: Feedback.new } %>
+  </div>
+  <div class="flex-1 p-2">
+    <div id="feedbacks" class="space-y-4">
+      <div class="space-y-4">
+        <% if @feedbacks.any? %>
+          <%= render @feedbacks %>
+        <% else %>
+          <p class="text-gray-400">No feedback yet. Be the first to leave one!</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+

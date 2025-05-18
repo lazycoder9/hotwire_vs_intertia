@@ -1,0 +1,7 @@
+<%= turbo_stream.prepend "feedbacks" do %>
+  <%= render @feedback %>
+<% end %>
+
+<%= turbo_stream.replace "feedback_form" do %>
+  <%= render partial: "form", locals: { feedback: Feedback.new } %>
+<% end %>

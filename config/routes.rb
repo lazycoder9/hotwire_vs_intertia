@@ -13,10 +13,10 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   namespace :hotwire do
-    resource :feedbacks, only: %i[new create]
+    resources :feedbacks, only: %i[index new create]
   end
 
   namespace :inertia do
-    resource :feedbacks, only: %i[new create]
+    resources :feedbacks, only: %i[new create]
   end
 end

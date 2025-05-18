@@ -2,3 +2,17 @@
 
 @plugin "@tailwindcss/typography";
 @plugin "@tailwindcss/forms";
+
+@source "../../../app/views/**/*.html.erb";
+@source "../../../app/views/**/*.rb";
+@source "../../../app/helpers/**/*.rb";
+
+@layer components {
+  .glass-card {
+    @apply relative overflow-hidden rounded-xl p-6
+           bg-gradient-to-br from-white/1 to-white/4
+           backdrop-blur-lg border border-white/10
+           shadow-lg
+           bg-neutral-800/30;
+  }
+}

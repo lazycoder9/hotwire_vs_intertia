@@ -1,46 +1,46 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title inertia><%= content_for(:title) || "Hotwire Vs Inertia" %></title>
+    <title><%= content_for(:title) || "Hotwire vs Inertia" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
-    <%= yield :head %>
-
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
-
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
-    <%= vite_stylesheet_tag "application" %>
-    <%= vite_react_refresh_tag %>
     <%= vite_client_tag %>
+    <%= vite_stylesheet_tag "application" %>
+    <%= vite_javascript_tag "application" %>
     <%= vite_typescript_tag "inertia" %>
-    <%= inertia_ssr_head %>
-    <%= vite_javascript_tag 'application' %>
-    <!--
-      If using a TypeScript entrypoint file:
-        vite_typescript_tag 'application'
-
-      If using a .jsx or .tsx entrypoint, add the extension:
-        vite_javascript_tag 'application.jsx'
-
-      Visit the guide for more information: https://vite-ruby.netlify.app/guide/rails
-    -->
-
+    <%= yield :head %>
   </head>
+  <body class="bg-gray-900 text-gray-100 min-h-screen">
+    <nav class="w-full bg-gray-800 shadow flex items-center justify-between px-8 h-16">
+      <div class="flex items-center">
+        <span class="font-bold text-xl text-blue-400 tracking-tight">
+          Hotwire vs Inertia
+        </span>
+      </div>
+      <div class="flex space-x-4">
+        <%= link_to "Hotwire", hotwire_feedbacks_path, class: "px-4 py-2 rounded-md font-semibold bg-blue-600 hover:bg-blue-700 text-white transition" %>
+        <%= link_to "Inertia", inertia_feedbacks_path, class: "px-4 py-2 rounded-md font-semibold bg-blue-500 hover:bg-blue-600 text-white transition" %>
+      </div>
+    </nav>
 
-  <body>
-    <main class="container mx-auto mt-28 px-5 flex">
-      <%= yield %>
-    </main>
+    <!-- Main Content Area -->
+    <div class="flex h-[calc(100vh-4rem)]"> <!-- 4rem = 16 * 4 = 64px navbar -->
+      <!-- Sidebar -->
+      <aside class="w-64 bg-gray-800 border-r border-gray-700 flex flex-col py-8 px-4">
+        <nav class="space-y-2">
+          <%= link_to "Widget 1", '#', class: "block px-3 py-2 rounded-md hover:bg-gray-700 transition" %>
+          <%= link_to "Widget 2", '#', class: "block px-3 py-2 rounded-md hover:bg-gray-700 transition" %>
+          <%= link_to "Widget 3", '#', class: "block px-3 py-2 rounded-md hover:bg-gray-700 transition" %>
+          <%= link_to "Widget 4", '#', class: "block px-3 py-2 rounded-md hover:bg-gray-700 transition" %>
+          <%= link_to "Widget 5", '#', class: "block px-3 py-2 rounded-md hover:bg-gray-700 transition" %>
+          <%# Add more widgets as needed %>
+        </nav>
+      </aside>
+      <!-- Main Content -->
+      <main class="flex-1 p-8 overflow-y-auto">
+        <%= yield %>
+      </main>
+    </div>
   </body>
 </html>

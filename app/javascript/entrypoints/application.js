@@ -1,3 +1,4 @@
+import './application.css';
 // To see this message, add the following to the `<head>` section in your
 // views/layouts/application.html.erb
 //
@@ -12,6 +13,13 @@ console.log('Vite ⚡️ Rails')
 //     <%= vite_javascript_tag 'application.jsx' %>
 
 console.log('Visit the guide for more information: ', 'https://vite-ruby.netlify.app/guide/rails')
+
+// 1) load Turbo Drive & Frames/Streams
+import "@hotwired/turbo-rails"
+
+// 2) load your Stimulus application
+import "../controllers"
+
 
 // Example: Load Rails libraries in Vite.
 //
