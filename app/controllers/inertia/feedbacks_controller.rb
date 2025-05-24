@@ -1,16 +1,18 @@
 module Inertia
   class FeedbacksController < ApplicationController
-    def new
-      render inertia: "Feedback/New", props: { feedback: {} }
+    def index
+      @feedbacks = Feedback.order(created_at: :desc)
+
+      render inertia: "Feedback/Index", props: { feedbacks: @feedbacks }
     end
 
     def create
       feedback = Feedback.new(feedback_params)
 
       if feedback.save
-        redirect_to new_inertia_feedbacks_path, notice: "Thanks for your feedback!"
+        redirect_to inertia_feedbacks_path, notice: "Thanks for your feedback!"
       else
-        render inertia: "Feedback/New", props: {
+        render inertia: "Feedback/Index", props: {
           feedback: feedback.attributes,
           errors: feedback.errors
         }

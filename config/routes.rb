@@ -17,6 +17,6 @@ Rails.application.routes.draw do
   end
 
   namespace :inertia do
-    resources :feedbacks, only: %i[new create]
+    resources :feedbacks, only: %i[index new create]
   end
 end
