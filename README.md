@@ -1,24 +1,14 @@
-# README
+# Hotwire vs Inertia Showcase
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Hotwire vs Inertia Showcase is a Rails application demonstrating and comparing two modern approaches for building SPA-like user interfaces within Rails:
 
-Things you may want to cover:
+- **Hotwire** (Turbo & Stimulus): server-driven HTML updates with minimal JavaScript.
+- **Inertia.js** (React & Vite): client-side routing and state management using a JavaScript framework.
 
-* Ruby version
+The project includes parallel implementations of a simple feedback management interface under the `hotwire` and `inertia` namespaces, allowing you to explore:
 
-* System dependencies
+- Differences in update patterns and page rendering.
+- Trade-offs in code organization and developer workflow.
+- Performance characteristics and JavaScript footprint.
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Feel free to browse the `app/controllers/hotwire`, `app/views/hotwire`, `app/controllers/inertia`, and `app/javascript/inertia` directories to see each implementation side by side.
