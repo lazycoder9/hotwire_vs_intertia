@@ -12,35 +12,37 @@
     <%= vite_typescript_tag "inertia" %>
     <%= yield :head %>
   </head>
-  <body class="bg-gray-900 text-gray-100 min-h-screen">
-    <nav class="w-full bg-gray-800 shadow flex items-center justify-between px-8 h-16">
+  <body class="text-white min-h-screen">
+    <nav class="w-full glass-nav shadow-lg flex items-center justify-between px-6 h-14">
       <div class="flex items-center">
-        <span class="font-bold text-xl text-blue-400 tracking-tight">
+        <span class="font-bold text-base text-white tracking-tight">
           Hotwire vs Inertia
         </span>
       </div>
-      <div class="flex space-x-4">
-        <%= link_to "Hotwire", hotwire_feedbacks_path, class: "px-4 py-2 rounded-md font-semibold bg-blue-600 hover:bg-blue-700 text-white transition" %>
-        <%= link_to "Inertia", inertia_feedbacks_path, class: "px-4 py-2 rounded-md font-semibold bg-blue-500 hover:bg-blue-600 text-white transition" %>
+      <div class="flex space-x-3">
+        <%= link_to "Hotwire", hotwire_feedbacks_path, class: "glass-link font-medium text-sm" %>
+        <%= link_to "Inertia", inertia_feedbacks_path, class: "glass-link font-medium text-sm", data: { turbo: false } %>
       </div>
     </nav>
 
     <!-- Main Content Area -->
-    <div class="flex h-[calc(100vh-4rem)]"> <!-- 4rem = 16 * 4 = 64px navbar -->
+    <!-- Main Content Area -->
+    <div class="flex h-[calc(100vh-3.5rem)]"> <!-- Adjusted for 56px navbar -->
       <!-- Sidebar -->
-      <aside class="w-64 bg-gray-800 border-r border-gray-700 flex flex-col py-8 px-4">
-        <nav class="space-y-2">
-          <%= link_to "Widget 1", '#', class: "block px-3 py-2 rounded-md hover:bg-gray-700 transition" %>
-          <%= link_to "Widget 2", '#', class: "block px-3 py-2 rounded-md hover:bg-gray-700 transition" %>
-          <%= link_to "Widget 3", '#', class: "block px-3 py-2 rounded-md hover:bg-gray-700 transition" %>
-          <%= link_to "Widget 4", '#', class: "block px-3 py-2 rounded-md hover:bg-gray-700 transition" %>
-          <%= link_to "Widget 5", '#', class: "block px-3 py-2 rounded-md hover:bg-gray-700 transition" %>
-          <%# Add more widgets as needed %>
+      <aside class="w-64 glass-sidebar flex flex-col py-8 px-4">
+        <nav class="space-y-3">
+          <%= link_to "▣ Dashboard", '#', class: "glass-link block text-sm py-3 px-4" %>
+          <%= link_to "◐ Feedback", '#', class: "glass-link block text-sm py-3 px-4" %>
+          <%= link_to "◈ Settings", '#', class: "glass-link block text-sm py-3 px-4" %>
+          <%= link_to "◢ Analytics", '#', class: "glass-link block text-sm py-3 px-4" %>
+          <%= link_to "◯ Notifications", '#', class: "glass-link block text-sm py-3 px-4" %>
         </nav>
       </aside>
       <!-- Main Content -->
-      <main class="flex-1 p-8 overflow-y-auto">
-        <%= yield %>
+      <main class="flex-1 p-8 overflow-y-auto bg-gradient-to-br from-transparent via-white/[0.02] to-transparent">
+        <div class="max-w-6xl mx-auto">
+          <%= yield %>
+        </div>
       </main>
     </div>
   </body>

@@ -1,7 +1,9 @@
 import { Head, router, useForm } from '@inertiajs/react'
-import React, { FormEvent } from 'react'
+import React, { FormEvent, useState } from 'react'
 
 export default function FeedbackForm() {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  
   const { data, setData, post, reset, errors } = useForm({
     name: '',
     email: '',
@@ -10,79 +12,95 @@ export default function FeedbackForm() {
 
   function submit(e: FormEvent) {
     e.preventDefault()
+    setIsSubmitting(true)
+    
     post('/inertia/feedbacks', {
-      onSuccess: () => reset(),
+      onSuccess: () => {
+        reset()
+        setIsSubmitting(false)
+      },
+      onError: () => {
+        setIsSubmitting(false)
+      },
       preserveState: false,
     })
   }
 
   return (
-    <>
-        <form onSubmit={submit} className="glass-card space-y-6 p-8 rounded-xl max-w mr-10">
-          <div>
-            <label htmlFor="name" className="font-medium text-gray/100">
-              Name <span className="text-red-500">*</span>
-            </label>
-            <input
-              id="name"
-              name="name"
-              value={data.name}
-              onChange={e => setData('name', e.target.value)}
-              className="mt-1 block w-full rounded-md bg-neutral-800/30 border border-gray-700 text-gray-100 focus:ring-white/30 focus:border-white/5"
-            />
-            {errors.name && (
-              <p className="text-red-600 text-sm">{errors.name[0]}</p>
-            )}
-          </div>
-          <div>
-            <label htmlFor="email" className="block font-medium">
-              Email <span className="text-red-500">*</span>
-              <button
-                type="button"
-                title="We only use your email to follow up."
-                className="ml-2 text-gray-400 hover:text-gray-200 transition"
-              >
-                ℹ️
-              </button>
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              value={data.email}
-              onChange={e => setData('email', e.target.value)}
-              className="mt-1 block w-full rounded-md bg-neutral-800/30 border border-gray-700 text-gray-100 focus:ring-white/30 focus:border-white/5"
-            />
-            {errors.email && (
-              <p className="text-red-600 text-sm">{errors.email[0]}</p>
-            )}
-          </div>
-          <div>
-            <label htmlFor="message" className="block font-medium">
-              Message <span className="text-red-500">*</span>
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              rows={5}
-              value={data.message}
-              onChange={e => setData('message', e.target.value)}
-              className="mt-1 block w-full rounded-md bg-neutral-800/30 border border-gray-700 text-gray-100 focus:ring-white/30 focus:border-white/5"
-            />
-            {errors.message && (
-              <p className="text-red-600 text-sm">{errors.message[0]}</p>
-            )}
-          </div>
-          <div className="pt-4">
-            <button
-              type="submit"
-              className="px-6 py-2 bg-neutral-900 hover:bg-neutral-700 text-white font-semibold rounded-md shadow transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              disabled={Object.keys(errors).length > 0}
-            >
-              Submit
-            </button>
-          </div>
-        </form>
-    </>
+    <div className="glass-form mr-6">
+      <h2 className="text-lg font-bold text-white mb-4">
+        Share Your Feedback
+      </h2>
+      
+      <form onSubmit={submit} className="space-y-4">
+        <div className="space-y-1">
+          <label htmlFor="name" className="block text-xs font-medium text-white/90">
+            Name <span className="text-red-300">*</span>
+          </label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            placeholder="Enter your full name"
+            value={data.name}
+            onChange={e => setData('name', e.target.value)}
+            className="glass-input p-2 text-sm"
+            required
+          />
+          {errors.name && (
+            <p className="glass-error">{errors.name}</p>
+          )}
+        </div>
+
+        <div className="space-y-1">
+          <label htmlFor="email" className="block text-xs font-medium text-white/90">
+            Email <span className="text-red-300">*</span>
+            <span className="ml-2 text-white/60 text-xs">(for follow-up only)</span>
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="your.email@example.com"
+            value={data.email}
+            onChange={e => setData('email', e.target.value)}
+            className="glass-input p-2 text-sm"
+            required
+          />
+          {errors.email && (
+            <p className="glass-error">{errors.email}</p>
+          )}
+        </div>
+
+        <div className="space-y-1">
+          <label htmlFor="message" className="block text-xs font-medium text-white/90">
+            Message <span className="text-red-300">*</span>
+          </label>
+          <textarea
+            id="message"
+            name="message"
+            rows={5}
+            placeholder="Share your thoughts..."
+            value={data.message}
+            onChange={e => setData('message', e.target.value)}
+            className="glass-input p-2 text-sm resize-none"
+            required
+          />
+          {errors.message && (
+            <p className="glass-error">{errors.message}</p>
+          )}
+        </div>
+
+        <div className="pt-2">
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="glass-button w-full text-sm py-2"
+          >
+            {isSubmitting ? 'Sending…' : 'Send Feedback'}
+          </button>
+        </div>
+      </form>
+    </div>
   )
 }

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Hotwire vs Inertia - Technology Comparison Lab" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= vite_client_tag %>
+    <%= vite_react_refresh_tag %>
+    <%= vite_stylesheet_tag "application" %>
+    <%= vite_javascript_tag "application" %>
+    <%= vite_typescript_tag "inertia" %>
+    <%= yield :head %>
+  </head>
+  <body class="text-white min-h-screen welcome-body">
+    <!-- Floating navigation for welcome page -->
+    <nav class="fixed top-6 right-6 z-50 glass-floating-nav">
+      <div class="flex space-x-3">
+        <%= link_to "Hotwire", hotwire_feedbacks_path, class: "glass-nav-link" %>
+        <%= link_to "Inertia", inertia_feedbacks_path, class: "glass-nav-link", data: { turbo: false } %>
+      </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="min-h-screen py-12 px-6">
+      <%= yield %>
+    </main>
+  </body>
+</html>
